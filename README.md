@@ -3,5 +3,5 @@
 ## Getting started
 
 ```sh
-go get -u github.com/gin-gonic/gin
+go get -u github.com/suertle/go-package
 ```
