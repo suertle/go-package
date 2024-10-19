@@ -1,8 +1,8 @@
-package requestlog
+package logrequest
 
 import "time"
 
-type RequestLog struct {
+type LogRequest struct {
 	ID         uint   `gorm:"primaryKey"`
 	Method     string `gorm:"size:8"`
 	Host       string `gorm:"size:128"`

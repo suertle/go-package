@@ -1,4 +1,4 @@
-package requestlog
+package logrequest
 
 import (
 	"bytes"
@@ -13,7 +13,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func RequestLogHandler(db *gorm.DB) gin.HandlerFunc {
+func LogRequestHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Capture the request body
 		bodyBytes, err := io.ReadAll(c.Request.Body)
@@ -30,7 +30,7 @@ func RequestLogHandler(db *gorm.DB) gin.HandlerFunc {
 		}
 		c.Writer = customWriter
 
-		requestLog := RequestLog{
+		logRequest := LogRequest{
 			Method: c.Request.Method,
 			Host:   c.Request.Host,
 			Path:   c.Request.URL.Path,
@@ -44,10 +44,10 @@ func RequestLogHandler(db *gorm.DB) gin.HandlerFunc {
 			if r := recover(); r != nil {
 				// Capture panic details in response
 				panicMessage := fmt.Sprintf("%v", r)
-				requestLog.Response = panicMessage
-				requestLog.StatusCode = http.StatusInternalServerError
+				logRequest.Response = panicMessage
+				logRequest.StatusCode = http.StatusInternalServerError
 
-				if err := db.Create(&requestLog).Error; err != nil {
+				if err := db.Create(&logRequest).Error; err != nil {
 					log.Printf("Failed to log request: %v", err)
 				}
 
@@ -77,10 +77,10 @@ func RequestLogHandler(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		// Log the request details into the database
-		requestLog.Response = response
-		requestLog.StatusCode = statusCode
+		logRequest.Response = response
+		logRequest.StatusCode = statusCode
 
-		if err := db.Create(&requestLog).Error; err != nil {
+		if err := db.Create(&logRequest).Error; err != nil {
 			log.Printf("Failed to log request: %v", err)
 		}
 	}
