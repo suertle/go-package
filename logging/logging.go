@@ -19,7 +19,7 @@ const (
 	LogLevelFatal
 )
 
-var logLevel LogLevel = LogLevelDebug
+var logLevel LogLevel = LogLevelFatal
 
 var moduleName string = ""
 
