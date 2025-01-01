@@ -1,4 +1,4 @@
-package logger
+package logging
 
 import (
 	"fmt"
@@ -19,7 +19,7 @@ const (
 	LogLevelFatal
 )
 
-var logLevel LogLevel = LogLevelFatal
+var logLevel LogLevel = LogLevelDebug
 
 var moduleName string = ""
 
@@ -51,13 +51,13 @@ func formatLog(prefix string, v ...any) string {
 		line = 0
 	} else if moduleName != "" {
 		if idx := strings.Index(file, moduleName); idx != -1 {
-			file = file[idx:]
+			file = file[(idx + len(moduleName) + 1):]
 		}
 	}
 
 	// Format the timestamp, file, line, and the actual message
-	timestamp := time.Now().Format("2006-01-02 15:04:05")
-	return fmt.Sprintf("%s [%s] %s:%d\n%s", prefix, timestamp, file, line, fmt.Sprintln(v...))
+	timestamp := time.Now().Format("2006/01/02 15:04:05")
+	return fmt.Sprintf("%s %s %s:%d\n%s", prefix, timestamp, file, line, fmt.Sprintln(v...))
 }
 
 func Debug(v ...any) {
